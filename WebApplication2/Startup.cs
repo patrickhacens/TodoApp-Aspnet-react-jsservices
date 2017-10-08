@@ -23,8 +23,13 @@ namespace WebApplication2
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
-            services.AddSingleton<IDb>(new Db());
+            services.AddMvc()
+                .AddJsonOptions(opt =>
+                {
+                    opt.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                    opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                });
+            services.AddSingleton<IDb>(GetDb());
             return services.BuildServiceProvider();
         }
 
@@ -59,6 +64,51 @@ namespace WebApplication2
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
             });
+        }
+
+        private static Db GetDb()
+        {
+            return new Db()
+            {
+                Boards =
+                {
+                    new Domain.Board
+                    {
+                        Name = "Infraestructure",
+                        Items =
+                        {
+                            new Domain.Task
+                            {
+                                Title = "Think about it",
+                                Done = true
+                            },
+                            new Domain.Task
+                            {
+                                Title = "Be to lazy to do anything"
+                            }
+                        }
+                    },
+                    new Domain.Board
+                    {
+                        Name = "Design Patterns",
+                        Items =
+                        {
+                            new Domain.Task
+                            {
+                                Title = "Think about it",
+                            },
+                            new Domain.Task
+                            {
+                                Title = "Use Feature folders",
+                            },
+                            new Domain.Task
+                            {
+                                Title = "Think about js services"
+                            }
+                        }
+                    }
+                }
+            };
         }
     }
 }
