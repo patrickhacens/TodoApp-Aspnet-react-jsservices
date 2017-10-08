@@ -51,5 +51,7 @@ namespace WebApplication2.Domain
             this.Id = Guid.NewGuid();
         }
 
+
+        public override string ToString() => $"{Id} - {Title} - {Done} - Board: {Board?.Id} - {Board?.Name}";
     }
 }
