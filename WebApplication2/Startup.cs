@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WebApplication2.Services;
 
 namespace WebApplication2
 {
@@ -23,6 +24,7 @@ namespace WebApplication2
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddSingleton<IDb>(new Db());
             return services.BuildServiceProvider();
         }
 
